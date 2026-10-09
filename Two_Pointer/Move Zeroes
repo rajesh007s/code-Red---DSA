@@ -1,0 +1,349 @@
+# 🧩 LeetCode 283 - Move Zeroes
+
+## 🔗 Problem
+
+[LeetCode 283 - Move Zeroes](https://leetcode.com/problems/move-zeroes/)
+
+Move all zeros to the end of the array while maintaining the relative order of non-zero elements.
+
+**Important:** Modify the original array without creating another array.
+
+---
+
+## 🏷️ Tags
+
+* Array
+* Two Pointers
+* In-place Algorithm
+
+---
+
+## 📚 Topics
+
+* Arrays
+* Loops
+* Index Manipulation
+
+---
+
+## 📊 Difficulty
+
+Easy
+
+---
+
+## 💡 Intuition
+
+**Simple observation: We need to move all non-zero elements to the front and fill the remaining positions with zeros.**
+
+Example:
+
+```text
+Input:  [0, 1, 0, 3, 12]
+Output: [1, 3, 12, 0, 0]
+```
+
+Notice that:
+
+* The non-zero elements remain in their original order.
+* All zeros move to the end.
+* We do not create another array.
+
+Our solution uses a variable called `j` to track where the next non-zero element should be placed.
+
+---
+
+## 🧠 Thought Process
+
+### Start from:
+
+Start at index `0` and check every element in the array.
+
+### Step 1: Initialize `j`
+
+```java
+int j = 0;
+```
+
+`j` represents the position where the next non-zero element should be stored.
+
+Initially, `j = 0` because the first non-zero element should go at the beginning.
+
+### Step 2: Find non-zero elements
+
+```java
+for (int i = 0; i < nums.length; i++) {
+    if (nums[i] != 0) {
+        nums[j] = nums[i];
+        j++;
+    }
+}
+```
+
+* `i` checks every element.
+* `nums[i] != 0` checks whether the current element is non-zero.
+* `nums[j] = nums[i]` places the non-zero element at the next available position.
+* `j++` moves to the next position.
+
+### Step 3: Fill the remaining positions with zeros
+
+```java
+for (int i = j; i < nums.length; i++) {
+    nums[i] = 0;
+}
+```
+
+After placing all non-zero elements, `j` points to the first remaining position.
+
+We fill every position from `j` to the end with zero.
+
+---
+
+## 🏃 Dry Run
+
+### Example 1
+
+**Input:**
+
+```text
+nums = [0, 1, 0, 3, 12]
+```
+
+Initially:
+
+```text
+j = 0
+```
+
+### First loop: Move non-zero elements
+
+| `i` | `nums[i]` | Action              | `j` after action |
+| --: | --------: | ------------------- | ---------------: |
+|   0 |         0 | Skip zero           |                0 |
+|   1 |         1 | Place 1 at index 0  |                1 |
+|   2 |         0 | Skip zero           |                1 |
+|   3 |         3 | Place 3 at index 1  |                2 |
+|   4 |        12 | Place 12 at index 2 |                3 |
+
+After the first loop:
+
+```text
+[1, 3, 12, 3, 12]
+```
+
+**Important:** The last two positions still contain old values. We will overwrite them with zeros in the second loop.
+
+### Second loop: Fill zeros
+
+Since `j = 3`, start at index `3`.
+
+| Index | Action   | Array               |
+| ----: | -------- | ------------------- |
+|     3 | Set to 0 | `[1, 3, 12, 0, 12]` |
+|     4 | Set to 0 | `[1, 3, 12, 0, 0]`  |
+
+**Final output:**
+
+```text
+[1, 3, 12, 0, 0]
+```
+
+---
+
+## ⭐ Main Logic
+
+```text
+Start
+  ↓
+Set j = 0
+  ↓
+Check every element using i
+  ↓
+Is nums[i] non-zero?
+  ↓
+YES → Place it at nums[j]
+  ↓
+       Increase j
+  ↓
+Continue checking
+  ↓
+Fill remaining positions with zeros
+  ↓
+Finish
+```
+
+The first loop collects the non-zero elements at the beginning of the same array.
+
+The second loop fills the remaining positions with zeros.
+
+This works because we process the elements from left to right, so their original relative order is preserved.
+
+---
+
+## 🎯 Key Pattern
+
+### Two Pointers
+
+This solution uses two index variables:
+
+* `i` — searches through the array.
+* `j` — tracks where the next non-zero element belongs.
+
+They do different jobs.
+
+Example:
+
+```text
+nums = [0, 5, 0, 8]
+
+i finds 5 → place at index j = 0
+i finds 8 → place at index j = 1
+
+After filling zeros:
+
+[5, 8, 0, 0]
+```
+
+**When to recognize this pattern:**
+
+Look for two pointers when you need to rearrange an array in place, move selected elements, or separate elements based on a condition.
+
+---
+
+## ☕ Java Solution
+
+```java
+class Solution {
+    public void moveZeroes(int[] nums) {
+        int j = 0;
+
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] != 0) {
+                nums[j] = nums[i];
+                j++;
+            }
+        }
+
+        for (int i = j; i < nums.length; i++) {
+            nums[i] = 0;
+        }
+    }
+}
+```
+
+### Important lines explained
+
+**1. `int j = 0;`**
+
+Stores the position for the next non-zero element.
+
+**2. `if (nums[i] != 0)`**
+
+Processes only non-zero elements.
+
+**3. `nums[j] = nums[i];`**
+
+Copies the non-zero value to the next available position in the original array.
+
+**4. `j++;`**
+
+Moves the destination position forward.
+
+**5. `nums[i] = 0;`**
+
+Fills all remaining positions with zeros.
+
+### Why does the method return `void`?
+
+LeetCode checks the modified `nums` array directly. Therefore, we modify the original array instead of returning a new one.
+
+---
+
+## 🧪 Another Example
+
+**Input:**
+
+```text
+nums = [0, 0, 1]
+```
+
+After the first loop:
+
+```text
+[1, 0, 1]
+```
+
+Here, `j = 1`.
+
+After the second loop:
+
+```text
+[1, 0, 0]
+```
+
+**Output:**
+
+```text
+[1, 0, 0]
+```
+
+### Edge case: No zeros
+
+```text
+Input:  [1, 2, 3]
+Output: [1, 2, 3]
+```
+
+All elements are non-zero, so the array remains unchanged.
+
+---
+
+## ⏱️ Complexity
+
+### Time Complexity
+
+```text
+O(n)
+```
+
+The first loop visits every element once, and the second loop visits the remaining positions. Together, they take linear time.
+
+### Space Complexity
+
+```text
+O(1)
+```
+
+We use only a few variables (`i` and `j`) and modify the original array directly. No extra array is created.
+
+---
+
+## 📌 Key Takeaways
+
+* Move non-zero elements to the front.
+* Use `i` to search and `j` to track the destination.
+* Preserve the original order of non-zero elements.
+* Fill all remaining positions with zeros.
+* Modify the original array in place.
+* Time complexity: `O(n)`.
+* Extra space complexity: `O(1)`.
+
+---
+
+## 🧠 Pattern to Remember
+
+```text
+j = 0
+   ↓
+Search using i
+   ↓
+If nums[i] != 0
+   ↓
+nums[j] = nums[i]
+   ↓
+j++
+   ↓
+Fill nums[j...end] with zeros
+```
+
+💡 **Remember:** "First move all non-zero elements forward; then fill the remaining positions with zeros."
